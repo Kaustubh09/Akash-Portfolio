@@ -1,0 +1,2 @@
+Drop the portrait photo at /public/akash.jpg.
+The Hero component falls back to "AG" initials inside the gold ring if the image is missing.
