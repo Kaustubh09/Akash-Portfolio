@@ -18,7 +18,7 @@ export default function SectionHeader({ eyebrow, heading, subheading, align = 'c
       </h2>
       <div className={`divider-gold mt-5 ${dividerClass}`} />
       {subheading && (
-        <p className="mt-5 max-w-2xl text-base md:text-lg text-ink-muted leading-relaxed mx-auto">
+        <p className="mt-5 max-w-2xl text-base md:text-lg text-ink-muted leading-relaxed mx-auto text-center">
           {subheading}
         </p>
       )}

@@ -153,7 +153,7 @@ function BulletPanel({ title, points }) {
         {points.map((p, i) => (
           <li key={i} className="flex gap-3 text-sm md:text-base text-ink-muted leading-relaxed">
             <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gold-400 shrink-0" />
-            <span>{p}</span>
+            <span className="text-left md:text-justify">{p}</span>
           </li>
         ))}
       </ul>

@@ -5,11 +5,11 @@ export const footer = {
     'Akash Garg is a SEBI Registered Research Analyst (INH000027450) providing research-driven swing, intraday, and educational services to active Indian traders.',
   quickLinks: [
     { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
     { label: 'Services', href: '#services' },
     { label: 'Pricing', href: '#pricing' },
-    { label: 'Compliance', href: '#compliance' },
+    { label: 'About', href: '#about' },
     { label: 'FAQ', href: '#faq' },
+    { label: 'Compliance', href: '#compliance' },
   ],
   sebiRefs: [
     { label: 'SEBI Website', href: 'https://www.sebi.gov.in/' },

@@ -22,11 +22,13 @@ export default function App() {
       <Navbar onOpenContact={openContact} />
       <main>
         <Hero />
-        <About />
         <Services onOpenContact={openContact} />
         <Pricing onOpenContact={openContact} />
-        <Compliance />
+        <About />
+        {/* FAQ precedes Compliance — regulatory data is the densest content,
+            so it sits at the bottom where serious readers can dig in. */}
         <FAQ />
+        <Compliance />
       </main>
       <Footer />
       <FloatingContactButton onClick={openContact} />

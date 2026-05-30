@@ -1,11 +1,12 @@
 // Navigation links — `href` uses anchor IDs matched to section components.
-// Add or reorder freely.
+// Order here MUST mirror the section order in App.jsx so the scroll-spy
+// highlights the correct item as users scroll.
 
 export const navLinks = [
   { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
   { label: 'Services', href: '#services' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Compliance', href: '#compliance' },
+  { label: 'About', href: '#about' },
   { label: 'FAQ', href: '#faq' },
+  { label: 'Compliance', href: '#compliance' },
 ];
