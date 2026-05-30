@@ -1,27 +1,32 @@
 // About section content — credentials, philosophy, vision/mission.
+//
+// `highlights[].available: false` → render a red X instead of a green check,
+// so services NOT offered are visually clear (e.g. F&O Calls).
 
 export const about = {
   eyebrow: 'About Me',
-  heading: 'Research-first. Discipline always.',
+  heading: "Risk isn't dangerous when it's calculated and researched",
   intro:
-    "I'm a SEBI Registered Research Analyst (INH000027450) with a deep focus on price action, volume profile, and market structure. My goal is simple — help traders make informed, risk-managed decisions, not chase tips.",
+    "I am a SEBI Registered Research Analyst (INH000027450) with expertise in finance, stock markets, and F&O trading. My mission is to provide research-backed intraday, swing, and long-term equity market calls, supported by detailed analysis and disciplined risk management. Every call is based on data, in-depth research, and a commitment to delivering quality insights to investors and traders.",
   paragraphs: [
-    "Over the last several years, I've worked across equity, options and futures markets — building a process that prioritises capital protection first and opportunity second. Every recommendation I share is grounded in research, not noise.",
-    "I do not promise guaranteed returns. What I offer is a transparent, SEBI-compliant framework that respects your capital and your time.",
+    "I started my stock market journey at the age of 22 while pursuing my engineering studies in Germany. From the beginning, I believed that success in the markets comes from knowledge, discipline, and continuous learning. I understand that many people do not have the time to study the markets in depth. In such cases, always seek guidance from SEBI-registered research analysts and avoid unauthorized tips or promises of guaranteed returns. The market offers opportunities, but it also requires caution and proper risk management. My philosophy is simple: learn continuously, make informed decisions, and focus on protecting capital while building long-term wealth.",
+    "It is important to remember that no one in the financial markets can guarantee fixed or risk-free returns. I do not promise guaranteed returns. What I offer is a transparent, SEBI compliant framework.",
   ],
   highlights: [
-    { title: 'SEBI Registered', detail: 'INH000027450 — fully compliant research practice.' },
-    { title: 'Certified Analyst', detail: 'NISM Research Analyst Series XV certified.' },
-    { title: 'Risk-First Approach', detail: 'Defined stop-loss & position sizing on every idea.' },
-    { title: 'Data-Driven Setups', detail: 'Technical structure + volume confirmation.' },
+    { title: 'SEBI Registered (INH000027450)' },
+    { title: 'NISM XV Certified' },
+    { title: 'German Graduate' },
+    { title: 'Equity Calls' },
+    { title: 'F&O Calls', available: false }, // not offered — renders red X
   ],
-  vision: {
-    label: 'Vision',
-    text: 'Invest with knowledge & safety.',
-  },
-  mission: {
-    label: 'Mission',
-    text:
-      'Empower retail traders with disciplined, research-driven market insights that respect both capital and process.',
+  // Single combined message card (merged from vision + mission).
+  // `title` displays on the yellow header; each entry in `body` renders as
+  // its own paragraph on the dark content area (so add/split for spacing).
+  message: {
+    title: 'My Message to Youth & Beginners',
+    body: [
+      "Never be afraid of taking calculated risks at a young age. This is the best phase of life to learn, explore, and build your future with knowledge and discipline.",
+      "In the stock market, experience matters a lot. Learning from experienced guidance can save you from years of mistakes, emotional decisions, and unnecessary losses.",
+    ],
   },
 };

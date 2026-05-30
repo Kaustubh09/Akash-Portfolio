@@ -123,9 +123,23 @@
 @layer utilities {
   .text-gold-gradient {
     @apply bg-gold-gradient bg-clip-text text-transparent;
+    /* inline-block + tiny bottom padding avoids descender clipping ("p", "g")
+       that some browsers introduce when a gradient is masked to text. */
+    display: inline-block;
+    padding-bottom: 0.08em;
+    line-height: 1.05;
   }
 
   .ring-gold {
     box-shadow: 0 0 0 1px rgba(245, 197, 24, 0.4), 0 0 40px -10px rgba(245, 197, 24, 0.4);
+  }
+
+  /* Force NO auto mid-word hyphenation anywhere — words always wrap whole.
+     Overrides Tailwind's `hyphens-auto` utility if used. Browser default
+     for `word-break` (normal) is preserved so layout doesn't shift. */
+  .no-hyphens,
+  body {
+    -webkit-hyphens: manual !important;
+    hyphens: manual !important;
   }
 }
