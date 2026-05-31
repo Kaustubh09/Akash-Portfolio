@@ -19,14 +19,20 @@ export const about = {
     { title: 'Equity Calls' },
     { title: 'F&O Calls', available: false }, // not offered — renders red X
   ],
-  // Single combined message card (merged from vision + mission).
-  // `title` displays on the yellow header; each entry in `body` renders as
-  // its own paragraph on the dark content area (so add/split for spacing).
+  // Personal message card.
+  //   title         → main heading on the yellow strip
+  //   quote         → pull-quote in large display font (acts as the hook)
+  //   body          → supporting paragraphs (string or string[])
+  //   signature     → name shown under the body (with AG monogram)
+  //   signatureRole → small caption under the signature
   message: {
     title: 'My Message to Youth & Beginners',
+    quote: 'Never be afraid of taking calculated risks at a young age.',
     body: [
-      "Never be afraid of taking calculated risks at a young age. This is the best phase of life to learn, explore, and build your future with knowledge and discipline.",
-      "In the stock market, experience matters a lot. Learning from experienced guidance can save you from years of mistakes, emotional decisions, and unnecessary losses.",
+      "This is the best phase of life to learn, explore, and build your future with knowledge and discipline.",
+      "In the stock market, experience matters. Learning from experienced guidance saves you from years of mistakes, emotional decisions, and unnecessary losses.",
     ],
+    signature: 'Akash Garg',
+    signatureRole: 'SEBI Registered Research Analyst',
   },
 };

@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Mail, Phone, MapPin, CheckCircle2 } from 'lucide-react';
+import { X, Send, Mail, Phone, MapPin, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { contact } from '../content/contact';
 import { site } from '../content/site';
 
 // Modal is intentionally NOT opened on page load — only when the parent toggles
 // `open` to true (FAB click, nav button click, or any service CTA).
+//
+// Form submission POSTs to `site.formEndpoint` (FormSubmit AJAX). FormSubmit
+// then forwards the payload as an email to the configured inbox.
 export default function ContactModal({ open, onClose }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const [form, setForm] = useState({});
 
   // Reset state whenever modal closes
@@ -15,6 +20,8 @@ export default function ContactModal({ open, onClose }) {
     if (!open) {
       const t = setTimeout(() => {
         setSubmitted(false);
+        setSubmitting(false);
+        setError(null);
         setForm({});
       }, 200);
       return () => clearTimeout(t);
@@ -36,13 +43,89 @@ export default function ContactModal({ open, onClose }) {
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
+    if (error) setError(null);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    // TODO: integrate with backend / form service (e.g. Formspree, Resend)
-    // For now: simulate success.
+  // Build subject + plain-text body once — used by both delivery paths.
+  function buildEmail() {
+    const subject = form.subject
+      ? `[Website] ${form.subject}`
+      : `[Website] New enquiry from ${form.name || 'visitor'}`;
+    const body = [
+      `Name: ${form.name || ''}`,
+      `Email: ${form.email || ''}`,
+      `Phone: ${form.phone || ''}`,
+      form.subject ? `Subject: ${form.subject}` : null,
+      '',
+      'Message:',
+      form.message || '',
+    ]
+      .filter((line) => line !== null)
+      .join('\n');
+    return { subject, body };
+  }
+
+  // Fallback: open the visitor's default email client with everything
+  // pre-filled. Works on every device with mail configured — no API, no CORS.
+  function openMailClient() {
+    const { subject, body } = buildEmail();
+    const url = `mailto:${site.email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+    // Use window.open in a new tab so the modal/page state isn't lost.
+    window.open(url, '_blank');
     setSubmitted(true);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (submitting) return;
+    setError(null);
+    setSubmitting(true);
+
+    // -- Path 1: Web3Forms direct delivery (only if access key is configured)
+    if (site.web3formsAccessKey) {
+      try {
+        // FormData → multipart/form-data → CORS-"simple", no preflight.
+        const fd = new FormData();
+        fd.append('access_key', site.web3formsAccessKey);
+        const { subject } = buildEmail();
+        fd.append('subject', subject);
+        fd.append('from_name', form.name || 'Website Visitor');
+        fd.append('name', form.name || '');
+        fd.append('email', form.email || '');
+        fd.append('phone', form.phone || '');
+        fd.append('message', form.message || '');
+        if (form.subject) fd.append('user_subject', form.subject);
+
+        const resp = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: fd,
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (resp.ok && data?.success) {
+          setSubmitted(true);
+          setSubmitting(false);
+          return;
+        }
+        // API responded but not success — fall through to mailto fallback.
+      } catch {
+        // Network/CORS failure — fall through to mailto fallback.
+      }
+    }
+
+    // -- Path 2: mailto: fallback (default if no access key, or on API error)
+    try {
+      openMailClient();
+    } catch (err) {
+      setError(
+        "Couldn't open your email client. Please email " +
+          site.email +
+          ' directly.'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -133,7 +216,8 @@ export default function ContactModal({ open, onClose }) {
                             rows={4}
                             value={form[field.name] || ''}
                             onChange={handleChange}
-                            className="input resize-none"
+                            disabled={submitting}
+                            className="input resize-none disabled:opacity-60"
                           />
                         ) : (
                           <input
@@ -144,14 +228,47 @@ export default function ContactModal({ open, onClose }) {
                             required={field.required}
                             value={form[field.name] || ''}
                             onChange={handleChange}
-                            className="input"
+                            disabled={submitting}
+                            className="input disabled:opacity-60"
                           />
                         )}
                       </div>
                     ))}
-                    <button type="submit" className="btn-primary w-full mt-2">
-                      <Send size={16} />
-                      {contact.submitLabel}
+
+                    {error && (
+                      <div
+                        role="alert"
+                        className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2.5 text-xs text-red-300"
+                      >
+                        <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                        <span>
+                          {error}{' '}
+                          <a
+                            href={`mailto:${site.email}`}
+                            className="underline font-semibold hover:text-red-200"
+                          >
+                            Email {site.email}
+                          </a>
+                        </span>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="btn-primary w-full mt-2 disabled:cursor-wait"
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" />
+                          Sending…
+                        </>
+                      ) : (
+                        <>
+                          <Send size={16} />
+                          {contact.submitLabel}
+                        </>
+                      )}
                     </button>
                   </form>
                 )}

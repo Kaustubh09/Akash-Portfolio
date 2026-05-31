@@ -7,7 +7,7 @@ export const hero = {
   title: 'Get the best Market Research and Equity calls and avail many other complimentary benefits ',
   description:
     "Hi, I am Akash Garg SEBI Registered Research Analyst (INH000027450)",
-  ctaPrimary: { label: 'Learn About Me', href: '#about' },
+  ctaPrimary: { label: 'About Me', href: '#about' },
   ctaSecondary: { label: 'Explore Services', href: '#services' },
   stats: [
     { value: '7+', label: 'Years of Market Experience' },

@@ -12,5 +12,6 @@ export const contact = {
     { name: 'message', label: 'Message', type: 'textarea', placeholder: 'Tell me a bit about what you’re looking for…', required: true },
   ],
   submitLabel: 'Send Message',
-  successMessage: 'Thank you! Your message has been received. I’ll get back to you within 24 hours.',
+  successMessage:
+    "Your message is on its way. I'll get back to you within 24 hours.",
 };

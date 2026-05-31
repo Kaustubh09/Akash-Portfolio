@@ -25,7 +25,7 @@ export const services = {
       title: 'Free Education',
       description:
         'Lean every concept for basic to advanced',
-      features: ['Stock Market', 'Mutual Funds', 'Investing & Trading', 'Future & Option Trading (F&O)', 'Risk Management', 'Psychology', 'many more...'],
+      features: ['Stock Market', 'Mutual Funds', 'Investing & Trading', 'Futures & Options Trading (F&O)', 'Risk Management', 'Psychology', 'many more...'],
     },
     {
       icon: 'MessageCircleQuestion',

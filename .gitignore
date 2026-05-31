@@ -16,3 +16,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local backup of unprocessed source assets
+public/akash-original.png

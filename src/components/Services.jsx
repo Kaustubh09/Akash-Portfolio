@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { TrendingUp, Activity, GraduationCap, MessageCircleQuestion, Check, X, Plus } from 'lucide-react';
 import SectionHeader from './ui/SectionHeader';
 import { services } from '../content/services';
+import StockBackdrop from './decor/StockBackdrop';
 
 // Map content icon strings → lucide components. Add new mappings here when new
 // service items are introduced in content/services.js.
@@ -10,8 +11,15 @@ const iconMap = { TrendingUp, Activity, GraduationCap, MessageCircleQuestion };
 
 export default function Services() {
   return (
-    <section id="services" className="section bg-bg-soft/40">
-      <div className="section-inner">
+    <section id="services" className="section bg-bg-soft/40 relative overflow-hidden">
+      {/* Faint chart grid spanning the whole section */}
+      <StockBackdrop variant="grid" className="absolute inset-0 -z-10 opacity-80" />
+      {/* Bold rising chart line drifting along the bottom */}
+      <StockBackdrop
+        variant="chart"
+        className="absolute inset-x-0 bottom-0 -z-10 w-full h-80 md:h-[28rem] opacity-90"
+      />
+      <div className="section-inner relative">
         <SectionHeader
           eyebrow={services.eyebrow}
           heading={services.heading}

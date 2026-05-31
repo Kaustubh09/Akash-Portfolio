@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ShieldCheck, ChevronDown } from 'lucide-react';
 import { hero } from '../content/hero';
 import { site } from '../content/site';
+import StockBackdrop from './decor/StockBackdrop';
 
 export default function Hero() {
   return (
@@ -14,6 +15,21 @@ export default function Hero() {
         <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-gold-500/10 blur-3xl" />
         <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-gold-600/10 blur-3xl" />
       </div>
+
+      {/* Faint trading-chart grid behind everything */}
+      <StockBackdrop variant="grid" className="absolute inset-0 -z-10 opacity-100" />
+
+      {/* Bullish candlestick row hugging the bottom of the hero */}
+      <StockBackdrop
+        variant="candles"
+        className="absolute inset-x-0 -bottom-4 -z-10 w-full h-56 md:h-64 opacity-70"
+      />
+
+      {/* Rising chart line behind the candles for added depth */}
+      <StockBackdrop
+        variant="chart"
+        className="absolute inset-x-0 bottom-0 -z-10 w-full h-64 md:h-80 opacity-30"
+      />
 
       <div className="section-inner container-px grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         {/* Left — text */}
@@ -38,7 +54,7 @@ export default function Hero() {
           </h1>
 
           {hero.title && (
-            <p className="mt-5 text-lg md:text-xl text-gold-300 font-medium leading-snug max-w-2xl">
+            <p className="mt-5 text-lg md:text-xl text-white font-medium leading-snug max-w-2xl">
               {hero.title}
             </p>
           )}
@@ -105,18 +121,22 @@ function PortraitFrame({ src, alt }) {
       <div className="absolute inset-0 -m-2 rounded-full bg-gold-gradient blur-2xl opacity-30 animate-pulse-soft" />
       <div className="relative h-64 w-64 sm:h-72 sm:w-72 md:h-80 md:w-80 lg:h-[22rem] lg:w-[22rem] rounded-full p-1 bg-gold-gradient shadow-gold">
         <div className="relative h-full w-full rounded-full overflow-hidden bg-bg-soft">
-          {/* Image with graceful fallback to initials */}
+          {/* Image fills the ring. The fallback initials are only shown if the
+              image fails to load — controlled via inline style so it cannot
+              leak through `display: inline-block` from the gold-gradient utility. */}
           <img
             src={src}
             alt={alt}
             className="h-full w-full object-cover"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
-              e.currentTarget.nextSibling.style.display = 'flex';
+              const fb = e.currentTarget.nextSibling;
+              if (fb) fb.style.display = 'flex';
             }}
           />
           <div
-            className="absolute inset-0 hidden items-center justify-center text-6xl font-display font-bold text-gold-gradient"
+            style={{ display: 'none' }}
+            className="absolute inset-0 items-center justify-center text-6xl font-display font-bold text-gold-400"
             aria-hidden
           >
             AG
