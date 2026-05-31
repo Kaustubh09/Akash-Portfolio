@@ -6,8 +6,8 @@ const iconMap = { Instagram, Twitter, Send, Youtube };
 
 export default function Footer() {
   return (
-    <footer className="relative bg-bg-soft border-t border-white/5">
-      <div className="section-inner container-px pt-16 pb-8">
+    <footer className="relative bg-bg-soft border-t border-white/5 overflow-hidden">
+      <div className="section-inner container-px pt-16 pb-8 relative">
         <div className="grid md:grid-cols-12 gap-10 md:gap-8">
           {/* Brand block */}
           <div className="md:col-span-5">

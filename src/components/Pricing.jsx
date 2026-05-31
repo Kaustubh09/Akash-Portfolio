@@ -2,13 +2,16 @@ import { motion } from 'framer-motion';
 import { Check, Star, TrendingDown } from 'lucide-react';
 import SectionHeader from './ui/SectionHeader';
 import { pricing } from '../content/pricing';
+import StockBackdrop from './decor/StockBackdrop';
 
 export default function Pricing({ onOpenContact }) {
   return (
-    <section id="pricing" className="section relative">
+    <section id="pricing" className="section relative overflow-hidden">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-gradient-to-b from-gold-500/[0.04] to-transparent" />
+      {/* Subtle trading-chart grid backdrop */}
+      <StockBackdrop variant="grid" className="absolute inset-0 -z-10 opacity-60" />
 
-      <div className="section-inner">
+      <div className="section-inner relative">
         <SectionHeader
           eyebrow={pricing.eyebrow}
           heading={pricing.heading}

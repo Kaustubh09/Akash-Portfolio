@@ -25,16 +25,16 @@ export const faq = {
       a: 'I believe in direct communication. Clients can reach me on WhatsApp for their queries and also participate in complimentary Q&A sessions.',
     },
     {
-      q: 'Can you place trade?',
+      q: 'Can you place trade on my behalf?',
       a: 'No. As a Research Analyst, I am not permitted to execute trades on your behalf. All execution is done by you through your own broker.',
     },
     {
       q: 'Do you guarantee returns?',
-      a: 'No. SEBI strictly prohibits any form of guaranteed or assured returns. Every recommendation is based on research and disciplined risk management, but markets carry inherent risk.',
+      a: 'No. I do not promise any form of guaranteed or assured returns. Every recommendation is based on research and disciplined risk management, but markets carry inherent risk.',
     },
     {
       q: 'How do I raise a complaint?',
-      a: 'You can write to me directly, or escalate to SEBI SCORES (scores.sebi.gov.in) or the Smart ODR portal (smartodr.in) — full process is listed in the Compliance Data section.',
+      a: 'You can write to me directly, and if the problem still remains unresolved or you are unsatisfied, you can escalate to SEBI SCORES (scores.sebi.gov.in) or the Smart ODR portal (smartodr.in) — full process is listed in the Compliance Data section.',
     },
   ],
 };

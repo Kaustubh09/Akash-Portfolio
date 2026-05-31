@@ -18,10 +18,8 @@ export const footer = {
     { label: 'SEBI Investor Charter', href: 'https://www.sebi.gov.in/' },
   ],
   socials: [
-    { label: 'Instagram', icon: 'Instagram', href: 'https://instagram.com/' },
-    { label: 'X (Twitter)', icon: 'Twitter', href: 'https://twitter.com/' },
-    { label: 'Telegram', icon: 'Send', href: 'https://telegram.org/' },
-    { label: 'YouTube', icon: 'Youtube', href: 'https://youtube.com/' },
+    { label: 'Instagram', icon: 'Instagram', href: 'https://instagram.com/stopyourloss_akash' },
+    { label: 'YouTube', icon: 'Youtube', href: 'https://youtube.com/@stopyourlosswithakashgarg' },
   ],
   helpline: 'SEBI Toll-Free Helpline: 1800 22 7575 / 1800 266 7575',
 };
