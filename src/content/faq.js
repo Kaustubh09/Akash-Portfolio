@@ -5,24 +5,32 @@ export const faq = {
   heading: '',
   items: [
     {
-      q: 'Are you SEBI registered?',
-      a: 'Yes. I am a SEBI Registered Research Analyst under registration number INH000027450, fully compliant with the SEBI (Research Analysts) Regulations, 2014.',
+      q: 'Do you offer Trading or Investing courses?',
+      a: 'My Research Analyst (RA) service is not a traditional coaching program. The primary objective of my service is to provide research-backed equity calls and market insights. However, I believe that financial knowledge should be accessible to everyone. To help clients understand market terminology, investment concepts, and the rationale behind my research, I conduct complimentary educational sessions and Q&A discussions.',
+    },
+    {
+      q: 'I don’t know anything about the stock market. How can your RA service help me?',
+      a: 'This service is designed for both beginners and experienced market participants. You will receive research-backed equity calls with clear entry, stop-loss, and target levels. In addition, through complimentary educational sessions, you will learn stock market concepts from basic to advanced levels and receive ongoing support to enhance your understanding of investing and trading.',
+    },
+    {
+      q: 'Do you cover F&O (Futures and Options) calls in your RA service?',
+      a: 'No. I do not provide F&O trading calls. However, I conduct complimentary educational sessions on F&O concepts, strategies, and risk management only for my subscribed clients.',
+    },
+    {
+      q: 'How will I receive equity calls and updates?',
+      a: 'After subscribing to my RA service, you will be added to a private WhatsApp group where all equity calls, research updates, and important communications will be shared in a timely manner.',
+    },
+    {
+      q: 'How do you handle client queries?',
+      a: 'I believe in direct communication. Clients can reach me on WhatsApp for their queries and also participate in complimentary Q&A sessions.',
+    },
+    {
+      q: 'Can you place trade?',
+      a: 'No. As a Research Analyst, I am not permitted to execute trades on your behalf. All execution is done by you through your own broker.',
     },
     {
       q: 'Do you guarantee returns?',
       a: 'No. SEBI strictly prohibits any form of guaranteed or assured returns. Every recommendation is based on research and disciplined risk management, but markets carry inherent risk.',
-    },
-    {
-      q: 'How will I receive the trade recommendations?',
-      a: 'Recommendations are delivered through a private Telegram channel and email, with clearly defined entry, stop-loss, and target levels.',
-    },
-    {
-      q: 'Can you place trades on my behalf?',
-      a: 'No. As a Research Analyst, I am not permitted to execute trades on your behalf. All execution is done by you through your own broker.',
-    },
-    {
-      q: 'What is the refund / fee-back policy?',
-      a: 'Fees are non-refundable in general. A fee-back assurance applies for 10/25/45 days on the 1-month/6-month/1-year plans respectively, subject to no recommendation being availed.',
     },
     {
       q: 'How do I raise a complaint?',

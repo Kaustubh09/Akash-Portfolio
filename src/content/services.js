@@ -3,30 +3,36 @@
 
 export const services = {
   eyebrow: 'What I Offer',
-  heading: 'Three pillars. One disciplined process.',
+  heading: 'One Membership. Multiple Benefits.',
   subheading:
-    'Whether you trade short-term moves or hold for weeks, every call is researched, structured, and built around defined risk.',
+    'Subscribe to my SEBI-registered RA service. Educational resources and Investor Learning are included complimentary.',
   items: [
     {
       icon: 'TrendingUp',
-      title: 'Swing Trades',
+      title: 'Equity Calls',
       description:
-        'Multi-day to multi-week positional ideas with clearly defined entry, target, and stop-loss levels. Built around market structure, sector strength, and volume confirmation.',
-      features: ['Stock & index opportunities', 'Defined risk-reward (min 1:2)', 'Weekly outlook & review'],
-    },
-    {
-      icon: 'Activity',
-      title: 'Intraday Trades',
-      description:
-        'High-conviction, same-day setups for traders who can execute during market hours. Real-time levels with strict risk management and disciplined exits.',
-      features: ['Index & equity calls', 'Pre-market briefing', 'Live levels & alerts'],
+        'Get well researched calls',
+      features: [
+        'Intraday',
+        'Swing',
+        'Long Term Investing',
+        'Multibagger',
+        { text: 'F&O calls', strike: true },
+      ],
     },
     {
       icon: 'GraduationCap',
-      title: 'Education',
+      title: 'Free Education',
       description:
-        'Structured learning for traders who want to understand the why — not just follow signals. Cohorts cover price action, options strategy, and risk frameworks.',
-      features: ['Live cohorts & recordings', 'Workbooks & checklists', '1-on-1 mentorship'],
+        'Lean every concept for basic to advanced',
+      features: ['Stock Market', 'Mutual Funds', 'Investing & Trading', 'Future & Option Trading (F&O)', 'Risk Management', 'Psychology', 'many more...'],
+    },
+    {
+      icon: 'MessageCircleQuestion',
+      title: 'Free Q&A + Responsive Support',
+      description:
+        'Always ready to answer your questions',
+      features: ['Biweekly Q&A session ', 'Available on whatsapp for quick communication'],
     },
   ],
 };
