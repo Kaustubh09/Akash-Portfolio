@@ -12,7 +12,7 @@ export const pricing = {
   eyebrow: 'Subscription Plans',
   heading: 'Choose the plan that fits your style',
   subheading:
-    'All plans are SEBI compliant. Fees are inclusive of GST. Annual fee per family is capped at ₹1,51,000 as per SEBI guidelines.',
+    'Annual fee per family is capped at ₹1,51,000 as per SEBI guidelines.',
   plans: [
     {
       name: 'Monthly',
@@ -47,6 +47,4 @@ export const pricing = {
       highlighted: false,
     },
   ],
-  footnote:
-    'Statutory charges (GST) extra where applicable. Fee limits do not apply to non-individual clients.',
 };

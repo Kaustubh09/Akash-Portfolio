@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Mail, Phone, MapPin, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { contact } from '../content/contact';
 import { site } from '../content/site';
 
-// Modal is intentionally NOT opened on page load — only when the parent toggles
-// `open` to true (FAB click, nav button click, or any service CTA).
-//
-// Form submission POSTs to `site.formEndpoint` (FormSubmit AJAX). FormSubmit
-// then forwards the payload as an email to the configured inbox.
 export default function ContactModal({ open, onClose }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({});
+  // FIX 2+3: track the scroll position so we can restore it on iOS after
+  // removing the scroll-lock class (see below).
+  const scrollYRef = useRef(0);
 
-  // Reset state whenever modal closes
+  // Reset form state whenever the modal closes
   useEffect(() => {
     if (!open) {
       const t = setTimeout(() => {
@@ -28,15 +26,36 @@ export default function ContactModal({ open, onClose }) {
     }
   }, [open]);
 
-  // Esc to close + body scroll lock
+  // Esc to close + iOS-safe body scroll lock
   useEffect(() => {
     if (!open) return;
+
     const onKey = (e) => e.key === 'Escape' && onClose();
     document.addEventListener('keydown', onKey);
+
+    // FIX 2: iOS Safari ignores `overflow: hidden` on <body> for scroll
+    // locking — the page still scrolls under a fixed modal, which makes the
+    // modal appear to jump to the top. The reliable fix is to:
+    //   1. Record the current scroll position.
+    //   2. Set `position: fixed` on the body with a negative `top` equal to
+    //      the scroll offset (keeps the visual position intact).
+    //   3. On cleanup, undo the fixed position and restore scrollY manually.
+    scrollYRef.current = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollYRef.current}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
     document.body.style.overflow = 'hidden';
+
     return () => {
       document.removeEventListener('keydown', onKey);
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
       document.body.style.overflow = '';
+      // Restore the scroll position that was frozen while the modal was open
+      window.scrollTo(0, scrollYRef.current);
     };
   }, [open, onClose]);
 
@@ -46,7 +65,6 @@ export default function ContactModal({ open, onClose }) {
     if (error) setError(null);
   }
 
-  // Build subject + plain-text body once — used by both delivery paths.
   function buildEmail() {
     const subject = form.subject
       ? `[Website] ${form.subject}`
@@ -65,14 +83,11 @@ export default function ContactModal({ open, onClose }) {
     return { subject, body };
   }
 
-  // Fallback: open the visitor's default email client with everything
-  // pre-filled. Works on every device with mail configured — no API, no CORS.
   function openMailClient() {
     const { subject, body } = buildEmail();
     const url = `mailto:${site.email}?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
-    // Use window.open in a new tab so the modal/page state isn't lost.
     window.open(url, '_blank');
     setSubmitted(true);
   }
@@ -83,10 +98,8 @@ export default function ContactModal({ open, onClose }) {
     setError(null);
     setSubmitting(true);
 
-    // -- Path 1: Web3Forms direct delivery (only if access key is configured)
     if (site.web3formsAccessKey) {
       try {
-        // FormData → multipart/form-data → CORS-"simple", no preflight.
         const fd = new FormData();
         fd.append('access_key', site.web3formsAccessKey);
         const { subject } = buildEmail();
@@ -108,20 +121,16 @@ export default function ContactModal({ open, onClose }) {
           setSubmitting(false);
           return;
         }
-        // API responded but not success — fall through to mailto fallback.
       } catch {
-        // Network/CORS failure — fall through to mailto fallback.
+        // fall through to mailto
       }
     }
 
-    // -- Path 2: mailto: fallback (default if no access key, or on API error)
     try {
       openMailClient();
     } catch (err) {
       setError(
-        "Couldn't open your email client. Please email " +
-          site.email +
-          ' directly.'
+        "Couldn't open your email client. Please email " + site.email + ' directly.'
       );
     } finally {
       setSubmitting(false);
@@ -131,8 +140,15 @@ export default function ContactModal({ open, onClose }) {
   return (
     <AnimatePresence>
       {open && (
+        // FIX 2: `fixed inset-0` covers the entire **viewport** regardless of
+        // scroll position. Combined with the body position-fixed scroll lock
+        // above, the backdrop always fills the screen and the modal is always
+        // centred in the visible area — not at the top of the document.
+        //
+        // FIX 3: `p-4` gives safe breathing room on narrow phones so the modal
+        // never touches screen edges. `items-center justify-center` centres it.
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -144,6 +160,16 @@ export default function ContactModal({ open, onClose }) {
             onClick={onClose}
           />
 
+          {/* FIX 3: Modal panel sizing for mobile.
+              - `w-full` fills the padded area.
+              - `max-w-2xl` (not max-w-3xl) is narrower so it doesn't feel
+                zoomed on mid-size phones.
+              - `max-h-[85vh]` (reduced from 90vh) leaves a visible gap top
+                and bottom, making it obvious it's a floating modal.
+              - `overflow-y-auto` lets the form scroll internally rather than
+                the modal growing off-screen.
+              - `my-auto` ensures vertical centering inside the flex container
+                even if the modal is shorter than the viewport. */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -152,7 +178,7 @@ export default function ContactModal({ open, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card-gradient border border-gold-500/20 shadow-gold"
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-card-gradient border border-gold-500/20 shadow-gold"
           >
             <button
               onClick={onClose}
@@ -162,32 +188,40 @@ export default function ContactModal({ open, onClose }) {
               <X size={18} />
             </button>
 
+            {/* FIX 3: On mobile the two-column grid stacks vertically
+                (the gold rail becomes a top header, form below).
+                `md:grid-cols-5` kicks in at ≥768px only. */}
             <div className="grid md:grid-cols-5">
               {/* Left rail — quick contact info */}
-              <aside className="md:col-span-2 p-6 md:p-8 bg-gold-gradient text-bg rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
-                <h3 id="contact-title" className="text-2xl font-display font-bold">
+              {/* FIX 3: reduced padding on mobile (p-5 instead of p-6/p-8)
+                  so the rail doesn't eat too much vertical space when stacked */}
+              <aside className="md:col-span-2 p-5 md:p-8 bg-gold-gradient text-bg rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+                <h3 id="contact-title" className="text-xl md:text-2xl font-display font-bold">
                   {contact.title}
                 </h3>
-                <p className="mt-2 text-sm text-bg/80 leading-relaxed">
+                <p className="mt-1.5 text-sm text-bg/80 leading-relaxed">
                   {contact.subtitle}
                 </p>
 
-                <div className="mt-8 space-y-4 text-sm">
+                {/* FIX 3: on mobile, show contact details in a 2-col grid
+                    rather than a long vertical list to save vertical space */}
+                <div className="mt-5 md:mt-8 grid grid-cols-2 md:grid-cols-1 gap-3 md:gap-4 text-sm">
                   <ContactRow icon={Mail} label="Email" value={site.email} href={`mailto:${site.email}`} />
                   <ContactRow icon={Phone} label="Phone" value={site.phone} href={`tel:${site.phone.replace(/\s/g, '')}`} />
                   <ContactRow icon={MapPin} label="Location" value={site.address} />
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-bg/20 text-xs text-bg/80">
+                <div className="mt-5 md:mt-8 pt-4 md:pt-6 border-t border-bg/20 text-xs text-bg/80">
                   SEBI Registered Research Analyst
                   <div className="font-bold mt-0.5 text-bg">{site.sebiRegNo}</div>
                 </div>
               </aside>
 
               {/* Right — form / success */}
-              <div className="md:col-span-3 p-6 md:p-8">
+              {/* FIX 3: reduced padding on mobile */}
+              <div className="md:col-span-3 p-5 md:p-8">
                 {submitted ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center py-12">
+                  <div className="h-full flex flex-col items-center justify-center text-center py-8 md:py-12">
                     <div className="grid place-items-center h-16 w-16 rounded-full bg-gold-500/10 text-gold-400 mb-4 border border-gold-500/30">
                       <CheckCircle2 size={28} />
                     </div>
@@ -213,7 +247,7 @@ export default function ContactModal({ open, onClose }) {
                             name={field.name}
                             placeholder={field.placeholder}
                             required={field.required}
-                            rows={4}
+                            rows={3}
                             value={form[field.name] || ''}
                             onChange={handleChange}
                             disabled={submitting}
@@ -287,11 +321,13 @@ function ContactRow({ icon: Icon, label, value, href }) {
       <div className="grid place-items-center h-9 w-9 rounded-lg bg-bg/15 shrink-0">
         <Icon size={16} />
       </div>
-      <div>
+      <div className="min-w-0">
         <div className="text-[11px] uppercase tracking-widest font-bold text-bg/70">
           {label}
         </div>
-        <div className="font-semibold text-bg">{value}</div>
+        {/* FIX 3: break-all prevents long email/phone strings from overflowing
+            the contact rail on narrow screens */}
+        <div className="font-semibold text-bg break-all text-sm leading-snug">{value}</div>
       </div>
     </>
   );

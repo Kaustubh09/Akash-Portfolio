@@ -11,22 +11,21 @@ import ContactModal from './components/ContactModal';
 import FloatingContactButton from './components/FloatingContactButton';
 
 export default function App() {
-  // Single source of truth for modal visibility.
-  // IMPORTANT: must default to `false` — modal must NEVER auto-open on load.
   const [contactOpen, setContactOpen] = useState(false);
   const openContact = useCallback(() => setContactOpen(true), []);
   const closeContact = useCallback(() => setContactOpen(false), []);
 
   return (
-    <div className="grain min-h-screen text-ink bg-bg">
+    // FIX 1: overflow-x-hidden on the root wrapper clips any child that
+    // bleeds past 100vw (glow blurs, SVG backdrops, etc.) without affecting
+    // vertical scrolling. w-full ensures the div fills the viewport width.
+    <div className="grain min-h-screen text-ink bg-bg overflow-x-hidden w-full">
       <Navbar onOpenContact={openContact} />
       <main>
         <Hero />
         <Services onOpenContact={openContact} />
         <Pricing onOpenContact={openContact} />
         <About />
-        {/* FAQ precedes Compliance — regulatory data is the densest content,
-            so it sits at the bottom where serious readers can dig in. */}
         <FAQ />
         <Compliance />
       </main>
