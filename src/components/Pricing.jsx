@@ -24,11 +24,7 @@ export default function Pricing({ onOpenContact }) {
           ))}
         </div>
 
-        {pricing.footnote && (
-          <p className="mt-8 text-center text-xs md:text-sm text-ink-dim max-w-2xl mx-auto leading-relaxed">
-            {pricing.footnote}
-          </p>
-        )}
+        
       </div>
     </section>
   );

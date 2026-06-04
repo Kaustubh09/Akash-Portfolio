@@ -8,10 +8,10 @@ export const site = {
   tagline: 'Research-backed swing & intraday trade ideas — built for serious, risk-aware traders.',
   shortBio:
     "I'm Akash Garg — a SEBI Registered Research Analyst. I focus on price action, market structure, and disciplined risk management to deliver research-driven trade ideas across swing and intraday timeframes.",
-  email: 'akashgarg2164@gmail.com',
+  email: 'garg.akash.ga@gmail.com',
   phone: '+91 92170 21552',
   whatsapp: '+91 92170 21552',
-  address: 'Mumbai, Maharashtra, India',
+  address: 'G-401, Casa Greenville, Lodha Upper Thane, Mankoli - 421302',
   copyrightYear: new Date().getFullYear(),
 
   // Hero portrait — replace path with the real photo asset
@@ -34,5 +34,5 @@ export const site = {
   //      to your inbox. Free tier = 250 messages/month.
   // If the API call fails for any reason (network down, quota exhausted, etc.)
   // the form automatically falls back to the email-client mailto flow.
-  web3formsAccessKey: '30cbe88c-5a15-4310-9757-34764d4e5429',
+  web3formsAccessKey: '59832a46-bc0c-49ba-8da1-3dcfaa4b22fa',
 };

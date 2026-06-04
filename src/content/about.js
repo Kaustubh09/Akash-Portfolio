@@ -33,6 +33,6 @@ export const about = {
       "In the stock market, experience matters. Learning from experienced guidance saves you from years of mistakes, emotional decisions, and unnecessary losses.",
     ],
     signature: 'Akash Garg',
-    signatureRole: 'SEBI Registered Research Analyst',
+    signatureRole: 'SEBI Registered Research Analyst (INH000027450)',
   },
 };

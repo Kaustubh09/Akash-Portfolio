@@ -11,7 +11,7 @@ export const services = {
       icon: 'TrendingUp',
       title: 'Equity Calls',
       description:
-        'Get well researched calls',
+        'Get well researched calls with proper entry, stop-loss and target levels.',
       features: [
         'Intraday',
         'Swing',
@@ -24,7 +24,7 @@ export const services = {
       icon: 'GraduationCap',
       title: 'Free Education',
       description:
-        'Lean every concept for basic to advanced',
+        'Learn every concept from basic to advanced',
       features: ['Stock Market', 'Mutual Funds', 'Investing & Trading', 'Futures & Options Trading (F&O)', 'Risk Management', 'Psychology', 'many more...'],
     },
     {

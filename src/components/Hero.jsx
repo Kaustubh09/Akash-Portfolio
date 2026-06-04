@@ -8,12 +8,18 @@ export default function Hero() {
   return (
     <section
       id="home"
+      // FIX 1: overflow-hidden on the section itself clips the large glow
+      // blurs (-top-32 -left-32 h-[480px] etc.) that were bleeding outside
+      // the section and forcing a wider scroll width on mobile.
       className="relative pt-28 md:pt-32 pb-16 md:pb-24 overflow-hidden"
     >
-      {/* Ambient gold glow */}
+      {/* Ambient gold glow — kept inside overflow-hidden so blurs can't
+          push the layout wider than the viewport on narrow screens */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-gold-500/10 blur-3xl" />
-        <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-gold-600/10 blur-3xl" />
+        {/* FIX 1: replaced -left-32 / -top-32 with inset values that don't
+            overflow the right edge. Glow is just as visible but contained. */}
+        <div className="absolute top-0 left-0 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-[360px] w-[360px] translate-x-1/3 translate-y-1/3 rounded-full bg-gold-600/10 blur-3xl" />
       </div>
 
       {/* Faint trading-chart grid behind everything */}
@@ -75,7 +81,7 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Stats — sizing tuned so word-values like "Professional" never crop */}
+          {/* Stats */}
           <dl className="mt-12 grid grid-cols-3 gap-3 sm:gap-5 md:gap-7 max-w-xl">
             {hero.stats.map((s) => (
               <div key={s.label} className="text-left min-w-0">
@@ -121,9 +127,6 @@ function PortraitFrame({ src, alt }) {
       <div className="absolute inset-0 -m-2 rounded-full bg-gold-gradient blur-2xl opacity-30 animate-pulse-soft" />
       <div className="relative h-64 w-64 sm:h-72 sm:w-72 md:h-80 md:w-80 lg:h-[22rem] lg:w-[22rem] rounded-full p-1 bg-gold-gradient shadow-gold">
         <div className="relative h-full w-full rounded-full overflow-hidden bg-bg-soft">
-          {/* Image fills the ring. The fallback initials are only shown if the
-              image fails to load — controlled via inline style so it cannot
-              leak through `display: inline-block` from the gold-gradient utility. */}
           <img
             src={src}
             alt={alt}
@@ -146,7 +149,7 @@ function PortraitFrame({ src, alt }) {
         {/* SEBI badge */}
         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-bg-elev border border-gold-500/40 px-4 py-2 shadow-gold-sm whitespace-nowrap">
           <ShieldCheck size={14} className="text-gold-400" />
-          <span className="text-xs font-semibold text-ink">SEBI Registered</span>
+          <span className="text-xs font-semibold text-ink">Research Analyst</span>
         </div>
       </div>
     </div>

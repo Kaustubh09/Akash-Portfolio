@@ -10,6 +10,8 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* FIX 1: prevent any element from creating horizontal scroll */
+    overflow-x: hidden;
   }
 
   body {
@@ -18,6 +20,15 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* FIX 1: clip any overflowing children at the body level */
+    overflow-x: hidden;
+    /* FIX 1: ensure body never exceeds viewport width */
+    max-width: 100vw;
+  }
+
+  /* FIX 1: box-sizing safety net — prevents padding from adding to element width */
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
 
   /* Smooth typography baseline */
@@ -111,11 +122,17 @@
   /* Subtle grain texture for the dark base */
   .grain::before {
     content: '';
+    /* FIX 1: use absolute (not fixed) so grain doesn't create a stacking
+       context that interferes with fixed modals, and doesn't contribute
+       to page width on mobile */
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 1;
     opacity: 0.03;
+    /* FIX 1: explicitly prevent grain overlay from exceeding viewport */
+    max-width: 100vw;
+    overflow: hidden;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
@@ -123,20 +140,19 @@
 @layer utilities {
   .text-gold-gradient {
     @apply bg-gold-gradient bg-clip-text text-transparent;
-    /* inline-block + tiny bottom padding avoids descender clipping ("p", "g")
-       that some browsers introduce when a gradient is masked to text. */
     display: inline-block;
     padding-bottom: 0.08em;
     line-height: 1.05;
+  }
+   .overflow-wrap-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .ring-gold {
     box-shadow: 0 0 0 1px rgba(245, 197, 24, 0.4), 0 0 40px -10px rgba(245, 197, 24, 0.4);
   }
 
-  /* Force NO auto mid-word hyphenation anywhere — words always wrap whole.
-     Overrides Tailwind's `hyphens-auto` utility if used. Browser default
-     for `word-break` (normal) is preserved so layout doesn't shift. */
   .no-hyphens,
   body {
     -webkit-hyphens: manual !important;

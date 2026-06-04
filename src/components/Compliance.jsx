@@ -13,9 +13,6 @@ import {
 import SectionHeader from './ui/SectionHeader';
 import { compliance } from '../content/compliance';
 
-// All copy is sourced verbatim from content/compliance.js. Do not edit text
-// here. The component is a pure renderer for the structured data.
-
 const tabs = [
   { id: 'charter', label: 'Investor Charter', icon: ShieldCheck },
   { id: 'grievance', label: 'Grievance Redressal', icon: AlertTriangle },
@@ -25,6 +22,29 @@ const tabs = [
   { id: 'privacy', label: 'Privacy Policy', icon: Lock },
   { id: 'refund', label: 'Refund & Fee-Back', icon: RotateCcw },
 ];
+
+// Helper: convert URLs in text to anchor links
+function linkify(text) {
+  if (!text) return text;
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  return parts.map((part, i) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={i}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gold-400 hover:text-gold-300 underline break-all"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
 
 export default function Compliance() {
   const [active, setActive] = useState('charter');
@@ -39,10 +59,9 @@ export default function Compliance() {
         />
 
         <div className="grid lg:grid-cols-12 gap-6">
-          {/* Tabs — sidebar on desktop, horizontal scroll on mobile/tablet */}
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
-              <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-1 px-1">
+              <div className="flex flex-wrap lg:flex-col gap-2 pb-2">
                 {tabs.map((t) => {
                   const Icon = t.icon;
                   const isActive = active === t.id;
@@ -65,8 +84,7 @@ export default function Compliance() {
             </div>
           </aside>
 
-          {/* Active panel */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8 min-w-0">
             <motion.div
               key={active}
               initial={{ opacity: 0, y: 12 }}
@@ -85,7 +103,6 @@ export default function Compliance() {
           </div>
         </div>
 
-        {/* Complaints data */}
         <ComplaintsTable data={compliance.complaintsTable} />
       </div>
     </section>
@@ -93,14 +110,16 @@ export default function Compliance() {
 }
 
 // ============================================================================
-// Shared building blocks
+// Shared building blocks with linkify support
 // ============================================================================
 
 function PanelHeading({ children, sub }) {
   return (
     <div className="mb-6">
-      <h3 className="text-xl md:text-2xl font-display font-bold text-ink">{children}</h3>
-      {sub && <p className="mt-1 text-sm text-ink-muted">{sub}</p>}
+      <h3 className="text-xl md:text-2xl font-display font-bold text-ink break-words overflow-wrap-anywhere">
+        {children}
+      </h3>
+      {sub && <p className="mt-1 text-sm text-ink-muted break-words overflow-wrap-anywhere">{linkify(sub)}</p>}
       <div className="divider-gold mt-4" />
     </div>
   );
@@ -108,7 +127,7 @@ function PanelHeading({ children, sub }) {
 
 function SubHeading({ children }) {
   return (
-    <h4 className="text-base md:text-lg font-display font-semibold text-gold-300 mb-3">
+    <h4 className="text-base md:text-lg font-display font-semibold text-gold-300 mb-3 break-words overflow-wrap-anywhere">
       {children}
     </h4>
   );
@@ -121,7 +140,7 @@ function BulletList({ items }) {
       {items.map((p, i) => (
         <li key={i} className="flex gap-3 text-sm md:text-base text-ink-muted leading-relaxed">
           <span className="mt-2 h-1.5 w-1.5 rounded-full bg-gold-400 shrink-0" />
-          <span>{p}</span>
+          <span className="break-words overflow-wrap-anywhere">{linkify(p)}</span>
         </li>
       ))}
     </ul>
@@ -129,34 +148,25 @@ function BulletList({ items }) {
 }
 
 function BodyText({ children }) {
-  return (
-    <p className="text-sm md:text-base text-ink-muted leading-relaxed">
-      {children}
-    </p>
-  );
+  return <p className="text-sm md:text-base text-ink-muted leading-relaxed break-words overflow-wrap-anywhere">{linkify(children)}</p>;
 }
 
-// Generic section renderer — handles `body`, `bullets`, `subSections`, and
-// the special `visionMission` block (rendered as plain labeled text, no boxes,
-// to match the reference Investor Charter section A).
 function Section({ section }) {
   return (
     <div className="space-y-3">
       {section.heading && <SubHeading>{section.heading}</SubHeading>}
-
       {section.visionMission && (
         <div className="space-y-4 pl-1">
           <VisionMissionEntry label="Vision" text={section.visionMission.vision} />
           <VisionMissionEntry label="Mission" text={section.visionMission.mission} />
         </div>
       )}
-
       {section.body && <BodyText>{section.body}</BodyText>}
       {section.bullets && <BulletList items={section.bullets} />}
       {section.subSections?.map((sub, i) => (
         <div key={i} className="mt-4 rounded-lg border border-white/5 bg-bg-elev/50 p-4 space-y-2">
           {sub.heading && (
-            <h5 className="text-sm font-semibold uppercase tracking-widest text-gold-400">
+            <h5 className="text-sm font-semibold uppercase tracking-widest text-gold-400 break-words overflow-wrap-anywhere">
               {sub.heading}
             </h5>
           )}
@@ -171,31 +181,25 @@ function Section({ section }) {
 function VisionMissionEntry({ label, text }) {
   return (
     <div>
-      <div className="text-xs font-bold uppercase tracking-widest text-gold-400 mb-1">
-        {label}
-      </div>
-      <p className="text-sm md:text-base text-ink-muted leading-relaxed">{text}</p>
+      <div className="text-xs font-bold uppercase tracking-widest text-gold-400 mb-1">{label}</div>
+      <p className="text-sm md:text-base text-ink-muted leading-relaxed break-words overflow-wrap-anywhere">{linkify(text)}</p>
     </div>
   );
 }
 
 // ============================================================================
-// Specific panels
+// Charter Panel
 // ============================================================================
 
 function CharterPanel({ data }) {
   return (
     <div>
       <PanelHeading>{data.title}</PanelHeading>
-
-      {/* "INVESTOR CHARTER IN RESPECT OF RAS" — sits between the title and
-          the lettered sections, matching the reference site's layout. */}
       {data.subheading && (
-        <div className="mb-8 inline-flex items-center rounded-md bg-gold-500/10 border border-gold-500/30 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold-300">
+        <div className="mb-8 inline-flex items-center rounded-md bg-gold-500/10 border border-gold-500/30 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold-300 break-words overflow-wrap-anywhere">
           {data.subheading}
         </div>
       )}
-
       <div className="space-y-8">
         {data.sections.map((s, i) => (
           <Section key={i} section={s} />
@@ -205,12 +209,16 @@ function CharterPanel({ data }) {
   );
 }
 
+// ============================================================================
+// Grievance Panel
+// ============================================================================
+
 function GrievancePanel({ data }) {
   return (
     <div>
       <PanelHeading sub={data.intro}>{data.title}</PanelHeading>
 
-      {/* Escalation matrix */}
+      {/* Escalation matrix - scrollable */}
       <div className="overflow-x-auto -mx-2 px-2 mb-8">
         <table className="min-w-full text-sm border-separate border-spacing-0">
           <thead>
@@ -218,7 +226,7 @@ function GrievancePanel({ data }) {
               {data.matrixColumns.map((c) => (
                 <th
                   key={c}
-                  className="bg-bg-elev border-b border-gold-500/30 text-left text-[10px] uppercase tracking-widest text-gold-400 font-semibold px-3 py-3 whitespace-normal"
+                  className="bg-bg-elev border-b border-gold-500/30 text-left text-[10px] uppercase tracking-widest text-gold-400 font-semibold px-3 py-3 break-words whitespace-normal"
                 >
                   {c}
                 </th>
@@ -231,10 +239,12 @@ function GrievancePanel({ data }) {
                 {row.map((cell, ci) => (
                   <td
                     key={ci}
-                    className="px-3 py-3 border-b border-white/5 text-ink-muted text-xs md:text-sm align-top"
+                    className="px-3 py-3 border-b border-white/5 text-ink-muted text-xs md:text-sm align-top break-words whitespace-normal"
                   >
-                    {cell}
+                    {linkify(cell)}
+                    
                   </td>
+
                 ))}
               </tr>
             ))}
@@ -252,11 +262,11 @@ function GrievancePanel({ data }) {
             <span className="absolute left-0 top-0 grid place-items-center h-9 w-9 rounded-full bg-gold-gradient text-bg font-bold text-sm shadow-gold-sm">
               {i + 1}
             </span>
-            <div className="text-xs uppercase tracking-widest text-gold-400 font-semibold">
-              {s.step}
+            <div className="text-xs uppercase tracking-widest text-gold-400 font-semibold break-words overflow-wrap-anywhere">
+              {linkify(s.step)}
             </div>
-            <div className="mt-0.5 text-lg font-display font-semibold text-ink">{s.title}</div>
-            <p className="mt-1 text-sm md:text-base text-ink-muted leading-relaxed">{s.body}</p>
+            <div className="mt-0.5 text-lg font-display font-semibold text-ink break-words overflow-wrap-anywhere">{linkify(s.title)}</div>
+            <p className="mt-1 text-sm md:text-base text-ink-muted leading-relaxed break-words overflow-wrap-anywhere">{linkify(s.body)}</p>
           </li>
         ))}
       </ol>
@@ -264,7 +274,9 @@ function GrievancePanel({ data }) {
       {data.notes?.length > 0 && (
         <ul className="mt-6 space-y-1 text-xs text-ink-dim italic">
           {data.notes.map((n, i) => (
-            <li key={i}>• {n}</li>
+            <li key={i} className="break-words overflow-wrap-anywhere">
+              {linkify(n)}
+            </li>
           ))}
         </ul>
       )}
@@ -272,14 +284,18 @@ function GrievancePanel({ data }) {
   );
 }
 
+// ============================================================================
+// Disclaimer Panel
+// ============================================================================
+
 function DisclaimerPanel({ data }) {
   return (
     <div>
       <PanelHeading sub={data.intro}>{data.title}</PanelHeading>
       <ol className="space-y-3 list-decimal list-outside pl-5 marker:text-gold-400 marker:font-semibold">
         {data.points.map((p, i) => (
-          <li key={i} className="text-sm md:text-base text-ink-muted leading-relaxed pl-1">
-            {p}
+          <li key={i} className="text-sm md:text-base text-ink-muted leading-relaxed pl-1 break-words overflow-wrap-anywhere">
+            {linkify(p)}
           </li>
         ))}
       </ol>
@@ -287,8 +303,10 @@ function DisclaimerPanel({ data }) {
   );
 }
 
-// Generic panel for sections with a `sections[]` array (terms, disclosure,
-// privacy, refund). Handles body, bullets and nested sub-sections.
+// ============================================================================
+// Generic Rich Panel
+// ============================================================================
+
 function RichPanel({ data }) {
   return (
     <div>
@@ -303,7 +321,7 @@ function RichPanel({ data }) {
 }
 
 // ============================================================================
-// Complaints table block (lives outside the tab panel)
+// Complaints Table
 // ============================================================================
 
 function ComplaintsTable({ data }) {
@@ -315,19 +333,17 @@ function ComplaintsTable({ data }) {
       transition={{ duration: 0.5 }}
       className="mt-14 card p-6 md:p-8 space-y-10"
     >
-      {/* Header */}
       <div>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h3 className="text-xl md:text-2xl font-display font-bold text-ink">
+            <h3 className="text-xl md:text-2xl font-display font-bold text-ink break-words overflow-wrap-anywhere">
               {data.title}
             </h3>
-            <p className="mt-1 text-sm text-ink-muted">{data.period}</p>
+            <p className="mt-1 text-sm text-ink-muted break-words overflow-wrap-anywhere">{data.period}</p>
           </div>
           <div className="divider-gold" />
         </div>
 
-        {/* Monthly table */}
         <div className="mt-5 overflow-x-auto -mx-2 px-2">
           <table className="min-w-full text-sm border-separate border-spacing-0">
             <thead>
@@ -335,7 +351,7 @@ function ComplaintsTable({ data }) {
                 {data.columns.map((col) => (
                   <th
                     key={col}
-                    className="bg-bg-elev border-b border-gold-500/30 text-left text-[10px] uppercase tracking-widest text-gold-400 font-semibold px-3 py-3 whitespace-normal"
+                    className="bg-bg-elev border-b border-gold-500/30 text-left text-[10px] uppercase tracking-widest text-gold-400 font-semibold px-3 py-3 break-words whitespace-normal"
                   >
                     {col}
                   </th>
@@ -350,11 +366,11 @@ function ComplaintsTable({ data }) {
                     {row.map((cell, ci) => (
                       <td
                         key={ci}
-                        className={`px-3 py-3 border-b border-white/5 ${
+                        className={`px-3 py-3 border-b border-white/5 break-words whitespace-normal ${
                           isTotal ? 'text-gold-300' : 'text-ink'
                         }`}
                       >
-                        {cell}
+                        {linkify(cell)}
                       </td>
                     ))}
                   </tr>
@@ -367,15 +383,15 @@ function ComplaintsTable({ data }) {
         {data.notes?.length > 0 && (
           <ul className="mt-4 space-y-1 text-xs text-ink-dim">
             {data.notes.map((n, i) => (
-              <li key={i}>{n}</li>
+              <li key={i} className="break-words overflow-wrap-anywhere">
+                {linkify(n)}
+              </li>
             ))}
           </ul>
         )}
       </div>
 
-      {/* Trend table */}
       {data.trend && <ExtraTable data={data.trend} />}
-      {/* Annual table */}
       {data.annual && <ExtraTable data={data.annual} />}
     </motion.div>
   );
@@ -385,7 +401,7 @@ function ExtraTable({ data }) {
   const isEmpty = !data.rows || data.rows.length === 0;
   return (
     <div>
-      <h4 className="text-base md:text-lg font-display font-bold text-ink">{data.title}</h4>
+      <h4 className="text-base md:text-lg font-display font-bold text-ink break-words overflow-wrap-anywhere">{data.title}</h4>
       <div className="divider-gold mt-3 mb-4" />
       <div className="overflow-x-auto -mx-2 px-2">
         <table className="min-w-full text-sm border-separate border-spacing-0">
@@ -394,7 +410,7 @@ function ExtraTable({ data }) {
               {data.columns.map((col) => (
                 <th
                   key={col}
-                  className="bg-bg-elev border-b border-gold-500/30 text-left text-[10px] uppercase tracking-widest text-gold-400 font-semibold px-3 py-3 whitespace-normal"
+                  className="bg-bg-elev border-b border-gold-500/30 text-left text-[10px] uppercase tracking-widest text-gold-400 font-semibold px-3 py-3 break-words whitespace-normal"
                 >
                   {col}
                 </th>
@@ -406,17 +422,17 @@ function ExtraTable({ data }) {
               <tr>
                 <td
                   colSpan={data.columns.length}
-                  className="px-3 py-6 text-center text-sm text-ink-dim italic border-b border-white/5"
+                  className="px-3 py-6 text-center text-sm text-ink-dim italic border-b border-white/5 break-words"
                 >
-                  {data.emptyMessage || 'No data to disclose.'}
+                  {linkify(data.emptyMessage || 'No data to disclose.')}
                 </td>
               </tr>
             ) : (
               data.rows.map((row, ri) => (
                 <tr key={ri}>
                   {row.map((cell, ci) => (
-                    <td key={ci} className="px-3 py-3 border-b border-white/5 text-ink">
-                      {cell}
+                    <td key={ci} className="px-3 py-3 border-b border-white/5 text-ink break-words whitespace-normal">
+                      {linkify(cell)}
                     </td>
                   ))}
                 </tr>
