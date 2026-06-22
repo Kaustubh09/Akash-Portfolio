@@ -14,7 +14,7 @@ export const faq = {
     },
     {
       q: 'Do you cover F&O (Futures and Options) calls in your RA service?',
-      a: 'No. I do not provide F&O trading calls. However, I conduct complimentary educational sessions on F&O concepts, strategies, and risk management only for my subscribed clients.',
+      a: 'Yes, I do provide F&O trading calls. In addition, I also conduct complimentary educational sessions on F&O concepts, strategies, and risk management only for my subscribed clients.',
     },
     {
       q: 'How will I receive equity calls and updates?',

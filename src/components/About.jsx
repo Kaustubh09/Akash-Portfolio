@@ -50,11 +50,11 @@ export default function About() {
                           {h.detail}
                         </div>
                       )}
-                      {unavailable && (
+                     
                         <div className="text-xs text-red-400/80 mt-1 uppercase tracking-widest font-semibold">
-                          Not Offered
+                          F&O allowed
                         </div>
-                      )}
+                     
                     </div>
                   </div>
                 );

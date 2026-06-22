@@ -6,7 +6,7 @@ export const hero = {
   name: 'Research gives you Confidence',
   title: 'Get the best Market Research and Equity calls and avail many other complimentary benefits ',
   description:
-    "Hi, I am Akash Garg SEBI Registered Research Analyst (INH000027450)",
+    "Hi, I am Akash Garg, SEBI Registered Research Analyst (INH000027450)",
   ctaPrimary: { label: 'About Me', href: '#about' },
   ctaSecondary: { label: 'Explore Services', href: '#services' },
   stats: [

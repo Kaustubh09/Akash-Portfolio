@@ -9,7 +9,7 @@ export const services = {
   items: [
     {
       icon: 'TrendingUp',
-      title: 'Equity Calls',
+      title: 'Equity and Options Calls',
       description:
         'Get well researched calls with proper entry, stop-loss and target levels.',
       features: [
@@ -17,7 +17,7 @@ export const services = {
         'Swing',
         'Long Term Investing',
         'Multibagger',
-        { text: 'F&O calls', strike: true },
+        'F&O calls',
       ],
     },
     {
