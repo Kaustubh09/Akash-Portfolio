@@ -32,8 +32,8 @@ export default function About() {
 
             <div className="grid sm:grid-cols-2 gap-3 pt-4">
               {about.highlights.map((h) => {
-                const unavailable = h.available === false;
-                const Icon = unavailable ? XCircle : CheckCircle2;
+                const available = h.available === true;
+                const Icon = available ? CheckCircle2: XCircle ;
                 return (
                   <div
                     key={h.title}
@@ -50,11 +50,11 @@ export default function About() {
                           {h.detail}
                         </div>
                       )}
-                     
+                     {available && (
                         <div className="text-xs text-red-400/80 mt-1 uppercase tracking-widest font-semibold">
                           F&O allowed
                         </div>
-                     
+                     )}
                     </div>
                   </div>
                 );

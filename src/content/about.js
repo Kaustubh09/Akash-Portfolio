@@ -16,7 +16,7 @@ export const about = {
     { title: 'NISM XV Certified' },
     { title: 'German Graduate' },
     { title: 'Equity Calls' },
-    { title: 'F&O Calls' },
+    { title: 'F&O Calls', available: true  },
   ],
   // Personal message card.
   //   title         → main heading on the yellow strip
