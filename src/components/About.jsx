@@ -41,7 +41,7 @@ export default function About() {
                   >
                     <Icon
                       size={20}
-                      className={`mt-0.5 shrink-0 ${unavailable ? 'text-red-500' : 'text-gold-400'}`}
+                      className={`mt-0.5 shrink-0 ${available ? 'text-gold-400':'text-red-500' }`}
                     />
                     <div className="min-w-0">
                       <div className="font-semibold text-ink leading-snug">{h.title}</div>
