@@ -33,7 +33,7 @@ export default function About() {
             <div className="grid sm:grid-cols-2 gap-3 pt-4">
               {about.highlights.map((h) => {
                 const available = h.available === true;
-                const Icon = available ? CheckCircle2: XCircle ;
+                const Icon = CheckCircle2 ;
                 return (
                   <div
                     key={h.title}
@@ -41,7 +41,7 @@ export default function About() {
                   >
                     <Icon
                       size={20}
-                      className={`mt-0.5 shrink-0 ${available ? 'text-gold-400':'text-red-500' }`}
+                      className="mt-0.5 shrink-0  text-gold-400"
                     />
                     <div className="min-w-0">
                       <div className="font-semibold text-ink leading-snug">{h.title}</div>
@@ -51,7 +51,7 @@ export default function About() {
                         </div>
                       )}
                      {available && (
-                        <div className="text-xs text-red-400/80 mt-1 uppercase tracking-widest font-semibold">
+                        <div className="text-xs text-gold-400/80 mt-1 uppercase tracking-widest font-semibold">
                           F&O allowed
                         </div>
                      )}
