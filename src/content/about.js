@@ -1,7 +1,6 @@
 // About section content — credentials, philosophy, vision/mission.
 //
 // `highlights[].available: false` → render a red X instead of a green check,
-// so services NOT offered are visually clear (e.g. F&O Calls).
 
 export const about = {
   eyebrow: 'About Me',
@@ -17,7 +16,7 @@ export const about = {
     { title: 'NISM XV Certified' },
     { title: 'German Graduate' },
     { title: 'Equity Calls' },
-    { title: 'F&O Calls', available: false }, // not offered — renders red X
+    { title: 'F&O Calls' },
   ],
   // Personal message card.
   //   title         → main heading on the yellow strip
